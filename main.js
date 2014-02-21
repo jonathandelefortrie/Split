@@ -14,6 +14,8 @@ cvs.height = container.height;
 
 (function Main(){
 
+	base = _width/2;
+
 	mouseX = 0 * 0.5;
 	mouseY = 0 * 0.5;
 
@@ -45,8 +47,8 @@ cvs.height = container.height;
 					var xm = (u==0 || u==2) ? 1 : 3;
 					var ym = (u==0 || u==1) ? 1 : 3;
 
-					var x = (((arrayChildren[i].s*2)/4)*xm);
-					var y = (((arrayChildren[i].s*2)/4)*ym);
+					var x = (((arrayChildren[i].s*2)/4)*xm) + (arrayChildren[i].px - arrayChildren[i].s);
+					var y = (((arrayChildren[i].s*2)/4)*ym) + (arrayChildren[i].py - arrayChildren[i].s);
 					var s = ((arrayChildren[i].s*2)/4);
 
 					child = new ClassCircle.circle({p: { x:x , y:y  },s: s});
@@ -72,7 +74,7 @@ function Circle() {
 		this.py = args.p.y;
 		this.s = args.s;
 		this.r = this.s*2;
-		this.d = false;
+		this.l = base/(this.s*2);
 		this.c = color();
 
 	}
