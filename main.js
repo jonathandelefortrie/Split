@@ -1,4 +1,4 @@
-var imageData, constraints = { video: true, audio: false };
+var state = false, imageData, constraints = { video: true, audio: false };
 
 var URL = window.URL ||
     window.webkitURL ||
@@ -38,6 +38,8 @@ var vid = document.createElement('video');
 vid.width = 320;
 vid.height = 240;
 
+var but = document.getElementById("button");
+
 (function Main(){
 
 	arrayChildren = new Array();
@@ -46,44 +48,51 @@ vid.height = 240;
 	FirstChild = new ClassCircle.circle({p: { x: 320/2, y: 240/2 },s: 240/2});
 	arrayChildren.push(FirstChild);
 
-	draw = function() {
+	loop = function() {
 
-        setTimeout(function() {
+		ctx.clearRect(0,0,320, 240);
+		ctx2.clearRect(0,0,320, 240);
+		ctx2.drawImage(vid, 0, 0, 320, 240);
 
-			ctx.clearRect(0,0,320, 240);
-			ctx2.clearRect(0,0,320, 240);
-			ctx2.drawImage(vid, 0, 0, 320, 240);
+		for (i in arrayChildren) {
+			arrayChildren[i].draw();
 
-			for (i in arrayChildren) {
-				arrayChildren[i].draw();
+			distance = Math.sqrt(Math.pow(mouseX-arrayChildren[i].px,2)+Math.pow(mouseY-arrayChildren[i].py,2));
 
-				distance = Math.sqrt(Math.pow(mouseX-arrayChildren[i].px,2)+Math.pow(mouseY-arrayChildren[i].py,2));
+			if(distance < arrayChildren[i].r/2){
+				
+				for (var u = 0; u < 4; u++) {
 
-				if(distance < arrayChildren[i].r/2){
-					
-					for (var u = 0; u < 4; u++) {
+					var xm = (u==0 || u==2) ? 1 : 3;
+					var ym = (u==0 || u==1) ? 1 : 3;
 
-						var xm = (u==0 || u==2) ? 1 : 3;
-						var ym = (u==0 || u==1) ? 1 : 3;
+					var x = (((arrayChildren[i].s*2)/4)*xm) + (arrayChildren[i].px - arrayChildren[i].s);
+					var y = (((arrayChildren[i].s*2)/4)*ym) + (arrayChildren[i].py - arrayChildren[i].s);
+					var s = ((arrayChildren[i].s*2)/4);
 
-						var x = (((arrayChildren[i].s*2)/4)*xm) + (arrayChildren[i].px - arrayChildren[i].s);
-						var y = (((arrayChildren[i].s*2)/4)*ym) + (arrayChildren[i].py - arrayChildren[i].s);
-						var s = ((arrayChildren[i].s*2)/4);
+					child = new ClassCircle.circle({p: { x:x , y:y  },s: s});
+					arrayChildren.push(child);
 
-						child = new ClassCircle.circle({p: { x:x , y:y  },s: s});
-						arrayChildren.push(child);
+				};
+				arrayChildren[i].destroy();
+				arrayChildren.splice(i,1);
+			}
+		};
 
-					};
-					arrayChildren[i].destroy();
-					arrayChildren.splice(i,1);
-				}
-			};
+  	};
 
-			draw();
+  	draw = function(){
 
-	  	}, 1000/25 );
-
-	}
+  		if(!state){
+  			interval = setInterval( loop, 1000/25 );
+  			state = true;
+  			but.innerHTML = 'Stop';
+  		} else {
+  			clearInterval(interval);
+  			state = false;
+  			but.innerHTML = 'Start';
+  		}
+  	}
 
 })();
 
