@@ -21,8 +21,7 @@ cvs.height = container.height;
 
 	arrayChildren = new Array();
 
-	ClassCircle = new Circle();
-	FirstChild = new ClassCircle.circle({
+	FirstChild = new Circle({
 
 		p: { x: _width/2, y: _height/2 },
 		s: _width/4
@@ -51,7 +50,7 @@ cvs.height = container.height;
 					var y = (((arrayChildren[i].s*2)/4)*ym) + (arrayChildren[i].py - arrayChildren[i].s);
 					var s = ((arrayChildren[i].s*2)/4);
 
-					child = new ClassCircle.circle({p: { x:x , y:y  },s: s});
+					child = new Circle({p: { x:x , y:y  },s: s});
 					arrayChildren.push(child);
 
 				};
@@ -66,19 +65,20 @@ cvs.height = container.height;
 
 })();
 
-function Circle() {
+function Circle(args) {
 
-	this.circle = function(args){
-
-		this.px = args.p.x;
-		this.py = args.p.y;
-		this.s = args.s;
-		this.r = this.s*2;
-		this.l = base/(this.s*2);
-		this.c = color();
-
+	var color = function() {
+		return 'rgba(' + Math.floor(Math.random() * 255) + ', ' +Math.floor(Math.random() * 255)+', ' + Math.floor(Math.random() * 255) +', 1 )';
 	}
-	this.circle.prototype.draw = function(){
+
+	this.px = args.p.x;
+	this.py = args.p.y;
+	this.s = args.s;
+	this.r = this.s*2;
+	this.l = base/(this.s*2);
+	this.c = color();
+
+	this.draw = function(){
 
 		var e = this;
 		ctx.beginPath();
@@ -86,15 +86,10 @@ function Circle() {
 		ctx.arc(e.px, e.py, e.s, 0, Math.PI*2, true);
 		ctx.fill();
 	}
-	this.circle.prototype.destroy = function(){
+	this.destroy = function(){
 
 		var e = this;
 		for (key in e) { e[key]=null; }
-	}
-
-	color = function() {
-
-		return 'rgba(' + Math.floor(Math.random() * 255) + ', ' +Math.floor(Math.random() * 255)+', ' + Math.floor(Math.random() * 255) +', 1 )';
 	}
 }
 
