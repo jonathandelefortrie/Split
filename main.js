@@ -1,6 +1,11 @@
 var _width = window.innerWidth;
 var _height = window.innerHeight;
 
+var base = _width/2;
+
+var mouseX = 0 * 0.5;
+var mouseY = 0 * 0.5;
+
 var container = document.getElementById("container");
 container.width = _width;
 container.height = _height;
@@ -11,24 +16,15 @@ container.appendChild(cvs);
 cvs.width = container.width;
 cvs.height = container.height;
 
-
 (function Main(){
 
-	base = _width/2;
-
-	mouseX = 0 * 0.5;
-	mouseY = 0 * 0.5;
-
-	arrayChildren = new Array();
-
-	FirstChild = new Circle({
+	var arrayChildren = new Array();
+	arrayChildren.push(new Circle({
 
 		p: { x: _width/2, y: _height/2 },
 		s: _width/4
 
-	});
-
-	arrayChildren.push(FirstChild);
+	}));
 
 	loop = function() {
 
