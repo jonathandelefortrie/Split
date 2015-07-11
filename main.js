@@ -42,11 +42,8 @@ var but = document.getElementById("button");
 
 (function Main(){
 
-	arrayChildren = new Array();
-
-	ClassCircle = new Circle();
-	FirstChild = new ClassCircle.circle({p: { x: 320/2, y: 240/2 },s: 240/2});
-	arrayChildren.push(FirstChild);
+	var arrayChildren = new Array();
+	arrayChildren.push(new Circle({p: { x: 320/2, y: 240/2 },s: 240/2}));
 
 	loop = function() {
 
@@ -70,7 +67,7 @@ var but = document.getElementById("button");
 					var y = (((arrayChildren[i].s*2)/4)*ym) + (arrayChildren[i].py - arrayChildren[i].s);
 					var s = ((arrayChildren[i].s*2)/4);
 
-					child = new ClassCircle.circle({p: { x:x , y:y  },s: s});
+					child = new Circle({p: { x:x , y:y  },s: s});
 					arrayChildren.push(child);
 
 				};
@@ -96,17 +93,19 @@ var but = document.getElementById("button");
 
 })();
 
-function Circle() {
+function Circle(args) {
 
-	this.circle = function(args){
-
-		this.px = args.p.x;
-		this.py = args.p.y;
-		this.s = args.s;
-		this.r = this.s*2;
-
+	var color = function(x,y) {
+		data = ctx2.getImageData(x, y, 1, 1).data;
+		return 'rgba(' + data[0] + ', ' + data[1] +', ' + data[2] +', ' + data[3] + ' )';
 	}
-	this.circle.prototype.draw = function(){
+
+	this.px = args.p.x;
+	this.py = args.p.y;
+	this.s = args.s;
+	this.r = this.s*2;
+
+	this.draw = function(){
 
 		var e = this;
 		ctx.beginPath();
@@ -114,16 +113,10 @@ function Circle() {
 		ctx.arc(e.px, e.py, e.s, 0, Math.PI*2, true);
 		ctx.fill();
 	}
-	this.circle.prototype.destroy = function(){
+	this.destroy = function(){
 
 		var e = this;
 		for (key in e) { e[key]=null; }
-	}
-
-	color = function(x,y) {
-
-		data = ctx2.getImageData(x, y, 1, 1).data;
-		return 'rgba(' + data[0] + ', ' + data[1] +', ' + data[2] +', ' + data[3] + ' )';
 	}
 }
 
