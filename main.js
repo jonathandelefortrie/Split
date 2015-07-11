@@ -14,7 +14,8 @@ cvs.height = container.height;
 
 (function Main(){
 
-	id = 0;
+	base = _width/2;
+
 	mouseX = 0 * 0.5;
 	mouseY = 0 * 0.5;
 
@@ -40,17 +41,22 @@ cvs.height = container.height;
 			distance = Math.sqrt(Math.pow(mouseX-arrayChildren[i].px,2)+Math.pow(mouseY-arrayChildren[i].py,2));
 
 			if(distance < arrayChildren[i].r/2){
-				console.log('ok');
-				/*for (var i = 0; i < 4; i++) {
-					child = new ClassCircle.circle({
+				
+				for (var u = 0; u < 4; u++) {
 
-						p: { x: _width/2, y: _height/2 },// Change position
-						s: _width/4 // Change size
+					var xm = (u==0 || u==2) ? 1 : 3;
+					var ym = (u==0 || u==1) ? 1 : 3;
 
-					});
+					var x = (((arrayChildren[i].s*2)/4)*xm) + (arrayChildren[i].px - arrayChildren[i].s);
+					var y = (((arrayChildren[i].s*2)/4)*ym) + (arrayChildren[i].py - arrayChildren[i].s);
+					var s = ((arrayChildren[i].s*2)/4);
+
+					child = new ClassCircle.circle({p: { x:x , y:y  },s: s});
 					arrayChildren.push(child);
-				};*/
-				//arrayChildren[].destroy();
+
+				};
+				arrayChildren[i].destroy();
+				arrayChildren.splice(i,1);
 			}
 		};
 
@@ -68,29 +74,27 @@ function Circle() {
 		this.py = args.p.y;
 		this.s = args.s;
 		this.r = this.s*2;
-		this.d = false;
+		this.l = base/(this.s*2);
 		this.c = color();
 
 	}
-
 	this.circle.prototype.draw = function(){
 
 		var e = this;
-
 		ctx.beginPath();
 		ctx.fillStyle = e.c;
 		ctx.arc(e.px, e.py, e.s, 0, Math.PI*2, true);
 		ctx.fill();
 	}
+	this.circle.prototype.destroy = function(){
+
+		var e = this;
+		for (key in e) { e[key]=null; }
+	}
 
 	color = function() {
 
 		return 'rgba(' + Math.floor(Math.random() * 255) + ', ' +Math.floor(Math.random() * 255)+', ' + Math.floor(Math.random() * 255) +', 1 )';
-	}
-
-	this.circle.prototype.destroy = function(){
-		var e = this;
-		for (key in e) { e[key]=null; }
 	}
 }
 
